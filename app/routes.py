@@ -1,3 +1,4 @@
+from distutils.archive_util import make_archive
 from flask import Blueprint, abort, make_response, jsonify, request
 
 class User:
@@ -68,6 +69,18 @@ def get_all_users():
 
     return jsonify(users_response), 200
 
+# UPDATE USER 
+@users_bp.route("/<user_id>", methods=["PUT"])
+def update_user(user_id):
+    user = validate_user_id(user_id)
+
+    request_body = request.get_json()
+
+    user.username = request_body["username"]
+    user.email = request_body["email"]
+
+    return make_response(f"User with ID {user.user_id} successfully updated")
+
 # Delete user at user ID 
 @users_bp.route("/<user_id>", methods=["DELETE"])
 def delete_user(user_id):
@@ -75,10 +88,3 @@ def delete_user(user_id):
     users.pop(int(user_id))
 
     return make_response(f"User with id {user.user_id} successfully deleted.", 200)
-
-
-
-
-
-
-    
