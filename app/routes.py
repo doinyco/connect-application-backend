@@ -1,21 +1,11 @@
-from distutils.archive_util import make_archive
 from flask import Blueprint, abort, make_response, jsonify, request
+from app import db
+from app.models.user import User
+from app.models.event import Event
 
-class User:
-    def __init__(self, user_id, username, email):
-        self.user_id = user_id
-        self.username = username
-        self.email = email
 
-users_bp = Blueprint("user_bp", __name__, url_prefix="/users")
-
-users = {
-    1: User(1, "doinac", "doinyco@gmail.com"),
-    2: User(2, "gabbycl", "gabbcl@gmail.com"),
-    3: User(3, "fernafd", "ferdd@gmail.com"),
-    4: User(4, "bruce", "bras@gmail.com"),
-    5: User(5, "panda", "pandax1@gmail.com")
-}
+users_bp = Blueprint("user_bp", __name__, url_prefix="/user")
+events_bp = Blueprint("events_bp", __name__, url_prefix="/events")
 
 def validate_user_id(user_id):
     try:
@@ -23,44 +13,60 @@ def validate_user_id(user_id):
     except:
         return abort(make_response(jsonify({"message": f"Invalid user with ID {user_id} "}), 400))
 
-    if user_id not in users:
-        abort(make_response({"message": f"User with id {user_id} not found."}, 404))
-    else:
-        return users[user_id]
+    user = User.query.get(user_id)
 
+    if user is None:
+        return abort(make_response(jsonify({"message": f"User with id {user_id} not found."}), 404))
+    
+    return user
+
+def get_user_by_username(username):
+    user = User.query.filter_by(username=username).first()
+
+    return user
 
 # CREATE NEW USER
 @users_bp.route("", methods=["POST"])
 def create_user():
     request_body = request.get_json()
+    
     new_user = User(
-        user_id=request_body["user_id"],
+        # user_id=request_body["user_id"],
         username=request_body["username"],
         email=request_body["email"]
     )
+    db.session.add(new_user)
+    db.session.commit()
 
-    users[new_user.user_id] = new_user
-
-    return make_response(f"User with id {new_user.user_id} successfully created!", 201)
+    return {
+        "username": new_user.username,
+        "message": f"Successfully created username {new_user.username}"
+    }, 201
 
 # READ (GET) ONE USER 
-@users_bp.route("/<user_id>", methods=["GET"])
-def read_user(user_id):
-    user = validate_user_id(user_id)
+@users_bp.route("/<username>", methods=["GET"])
+def read_user(username):
+    user = get_user_by_username(username)
 
-    return jsonify({
-        "user_id":user.user_id,
-        "username":user.username,
-        "email":user.email
-    })
+    if user is None:
+        return {
+            "message": f"User {username} not found"
+        }, 404
+
+    response = {
+        "user_id": user.user_id,
+        "username": user.username
+    }
+
+    return jsonify({"user": response}), 200
 
 # READ (GET) ALL USERS
 @users_bp.route("", methods=["GET"])
 def get_all_users():
+    users = User.query.all()
     users_response = []
 
     for user in users:
-        user = users[user]
         users_response.append({
             "user_id": user.user_id,
             "username": user.username,
@@ -79,12 +85,25 @@ def update_user(user_id):
     user.username = request_body["username"]
     user.email = request_body["email"]
 
+    db.session.commit()
+
     return make_response(f"User with ID {user.user_id} successfully updated")
 
-# Delete user at user ID 
+# # Delete user at user ID 
 @users_bp.route("/<user_id>", methods=["DELETE"])
 def delete_user(user_id):
     user = validate_user_id(user_id)
-    users.pop(int(user_id))
+    db.session.delete(user)
+    db.session.commit()
 
-    return make_response(f"User with id {user.user_id} successfully deleted.", 200)
+    return {
+        "message": f"User with ID {user.user_id} successfully deleted."
+    }, 200
+
+
+
+
+
+
+
+
