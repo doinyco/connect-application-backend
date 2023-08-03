@@ -25,6 +25,21 @@ def get_user_by_username(username):
 
     return user
 
+def get_event_or_abort(event_id):
+    try:
+        event_id = int(event_id)
+    except ValueError:
+        response = {"message": "Invalid data!"}
+        abort(make_response(jsonify(response), 400))
+
+    get_event = Event.query.get(event_id)
+    
+    if get_event is None:
+        response = {"message": f"Event with ID {event_id} not found."}
+        abort(make_response(jsonify(response), 404))
+    
+    return get_event
+
 # CREATE NEW USER
 @users_bp.route("", methods=["POST"])
 def create_user():
@@ -99,6 +114,102 @@ def delete_user(user_id):
     return {
         "message": f"User with ID {user.user_id} successfully deleted."
     }, 200
+
+# CREATE ONE EVENT AT USER ID
+@events_bp.route("", methods=["POST"])
+def create_event():
+    request_body = request.get_json()
+
+    new_event = Event(
+        title = request_body["title"],
+        event_type = request_body["event_type"],
+        location = request_body["location"],
+        date = request_body["date"],
+        description = request_body["description"],
+        user_id = request_body["user_id"]
+    )
+
+    db.session.add(new_event)
+    db.session.commit()
+
+    return {
+        "event_id": new_event.event_id,
+        "event_type": new_event.event_type,
+        "message": f"Successfully created event with ID {new_event.event_id}"
+    }, 201
+
+# READ ALL EVENTS FROM ONE USER
+@users_bp.route("/<user_id>/events", methods=["GET"])
+def read_events_from_user(user_id):
+    user = validate_user_id(user_id)
+    events_response = []
+
+    for event in user.events:
+        events_response.append({
+            "event_id": event.event_id,
+            "title": event.title,
+            "event_type": event.event_type,
+            "location": event.location,
+            "date": event.date,
+            "description": event.description
+        })
+
+    return jsonify({
+        "user_id": user.user_id,
+        "username": user.username,
+        "events": events_response
+    }), 200
+
+
+# READ (GET) ALL EVENTS
+@events_bp.route("", methods=["GET"])
+def get_all_events():
+    events = Event.query.all()
+    events_response = []
+
+    for event in events:
+        events_response.append({
+            "event_id": event.event_id,
+            "title": event.title,
+            "event_type": event.event_type,
+            "location": event.location,
+            "date": event.date,
+            "description": event.description
+        })
+
+    return jsonify(events_response), 200
+        
+# UPDATE EVENT
+@events_bp.route("/<event_id>", methods=["PUT"])
+def update_event(event_id):
+    event = get_event_or_abort(event_id)
+
+    request_body = request.get_json()
+
+    event.title = request_body["title"]
+    event.event_type = request_body["event_type"]
+    event.location = request_body["location"]
+    event.date = request_body["date"]
+    event.description = request_body["description"]
+
+    db.session.commit()
+
+    return make_response(f"Event with ID {event.event_id} successfully updated")
+
+# DELETE EVENT
+@events_bp.route("/<event_id>", methods=["DELETE"])
+def delete_event(event_id):
+    chosen_event = get_event_or_abort(event_id)
+
+    db.session.delete(chosen_event)
+    db.session.commit()
+
+    return {
+        "message": f"Event with ID {chosen_event.event_id} successfully deleted."
+    }, 200
+
+
+
 
 
 
