@@ -9,5 +9,6 @@ class Event(db.Model):
     description = db.Column(db.String(500))
     user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
     user = db.relationship("User", back_populates="events")
+    file_data = db.Column(db.LargeBinary)
 
 
