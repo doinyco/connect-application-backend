@@ -7,8 +7,6 @@ class Event(db.Model):
     location = db.Column(db.String(50))
     date = db.Column(db.String(20))
     description = db.Column(db.String(500))
-    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id", ondelete="CASCADE"))
     user = db.relationship("User", back_populates="events")
     file_data = db.Column(db.LargeBinary)
-
-
