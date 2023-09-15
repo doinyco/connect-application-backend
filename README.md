@@ -11,6 +11,7 @@ This application is built using Flask, a Python web framework. It provides funct
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
 - [Database Models](#database-models)
+- [Deployed Version](#deployed-version) 
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -92,3 +93,15 @@ The application uses SQLAlchemy to interact with the database. Here are the rele
 
 - `User`: Represents a user with username, email, and password fields.
 - `Event`: Represents an event with title, event type, location, date, description, and file data fields.
+
+## Deployed Version
+
+You can access a deployed version of this application on [Fly.io](https://fly.io). Fly.io is a platform for deploying and scaling applications. For more information on deploying Python applications with Fly.io, refer to the [Fly.io Python Documentation](https://fly.io/docs/languages-and-frameworks/python/).
+
+- [Access the Events Endpoint](https://icy-surf-5897.fly.dev/events):
+  - When accessing this URL, you should see an empty list of events. This endpoint provides access to event data.
+
+- [Access the Root Endpoint](https://icy-surf-5897.fly.dev/):
+  - Due to the application's login authentication system, accessing this URL without proper authorization will result in an "Unauthorized" message. To interact with the application, please follow the authentication and usage guidelines mentioned in the [Usage](#usage) section of this README.
+
+The deployed version may have additional features or optimizations. Feel free to explore and use the deployed application for testing or production use.
