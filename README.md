@@ -50,3 +50,8 @@ Before you begin, ensure you have the following installed on your machine:
       ```shell
       venv\Scripts\activate
 
+4. Install the required packages:
+   ```shell
+     pip install -r requirements.txt
+
+
