@@ -45,4 +45,12 @@ Before you begin, ensure you have the following installed on your machine:
    ```shell
    cd <project-directory>
 
+3. Activate the virtual environment:
 
+On Windows:
+   ```shell
+   venv\Scripts\activate
+
+On macOS and Linux:
+   ```shell
+   source venv/bin/activate
