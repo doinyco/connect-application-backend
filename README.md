@@ -40,3 +40,9 @@ Before you begin, ensure you have the following installed on your machine:
 
    ```shell
    git clone <repository-url>
+
+2. Change to the project directory:
+   ```shell
+   cd <project-directory>
+
+
