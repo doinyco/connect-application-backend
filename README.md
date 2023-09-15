@@ -51,7 +51,7 @@ Before you begin, ensure you have the following installed on your machine:
       venv\Scripts\activate
    - On macOS and Linux:
      ```shell
-        source venv/bin/activate
+     source venv/bin/activate
 
 4. Install the required packages:
    ```shell
@@ -63,3 +63,9 @@ Before running the application, make sure to set up your environment variables. 
 - SECRET_KEY: A secret key for Flask's session management.
 - SQLALCHEMY_DATABASE_URI: The URI for your PostgreSQL database.
 - SQLALCHEMY_TEST_DATABASE_URI: The URI for your test database (if applicable).
+
+### Usage
+To run the application, execute the following command:
+```shell
+python run.py
+
