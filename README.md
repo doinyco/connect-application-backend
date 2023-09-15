@@ -88,3 +88,9 @@ Here are the available API endpoints:
 
 ### User Events
 - GET /users/<user_id>/events: Retrieve all events for a specific user.
+
+### Database Models
+The application uses SQLAlchemy to interact with the database. Here are the relevant database models:
+
+- `User`: Represents a user with username, email, and password fields.
+- `Event`: Represents an event with title, event type, location, date, description, and file data fields.
