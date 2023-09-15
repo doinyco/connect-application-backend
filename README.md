@@ -64,10 +64,7 @@ Before running the application, make sure to set up your environment variables. 
 - SQLALCHEMY_DATABASE_URI: The URI for your PostgreSQL database.
 - SQLALCHEMY_TEST_DATABASE_URI: The URI for your test database (if applicable).
 
-### Usage
-To run the application, execute the following command:
-   ```shell
-   python run.py
+By default, the application will run on http://localhost:5000.
 
 ### API Endpoints
 Here are the available API endpoints:
@@ -80,3 +77,14 @@ Here are the available API endpoints:
 - GET /users: Retrieve information for all users.
 - PUT /users/<user_id>: Update user information.
 - DELETE /users/<user_id>: Delete a user.
+
+### Events
+- POST /events/create_event: Create a new event.
+- GET /events/<event_id>: Retrieve information for a specific event.
+- GET /events: Retrieve information for all events.
+- GET /events/all: Retrieve information for all events (alternative endpoint).
+- PUT /events/<event_id>: Update event information.
+- DELETE /events/<event_id>: Delete an event.
+
+### User Events
+- GET /users/<user_id>/events: Retrieve all events for a specific user.
