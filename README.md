@@ -12,8 +12,6 @@ This application is built using Flask, a Python web framework. It provides funct
 - [API Endpoints](#api-endpoints)
 - [Database Models](#database-models)
 - [Deployed Version](#deployed-version) 
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Getting Started
 
@@ -104,4 +102,4 @@ You can access a deployed version of this application on [Fly.io](https://fly.io
 - [Access the Users Endpoint](https://icy-surf-5897.fly.dev/users):
   - Due to the application's login authentication system, accessing this URL without proper authorization will result in an "Unauthorized" message. 
 
-  > Note: I am currently working on the frontend application of this project. Once the register and login forms are added to the frontend application, the authentication system will work seamlessly. You can find the frontend repository for this project on [GitHub](https://github.com/doinyco/connect-application-frontend).
+  > Note: I am currently working on the frontend application of this project. Once the register and login forms are added to the frontend application, the authentication system will work seamlessly. You can find the frontend repository for this project [Here](https://github.com/doinyco/connect-application-frontend).
