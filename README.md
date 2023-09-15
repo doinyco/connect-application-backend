@@ -68,5 +68,3 @@ Before running the application, make sure to set up your environment variables. 
 To run the application, execute the following command:
 ```shell
 python run.py
-
-By default, the application will run on http://localhost:5000.
