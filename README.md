@@ -1,6 +1,4 @@
-# connect-application-backend
-
-# Backend Application README
+# Connect Application API
 
 This application is built using Flask, a Python web framework. It provides functionality for user authentication, event management, and file handling.
 
