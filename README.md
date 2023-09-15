@@ -2,7 +2,7 @@
 
 # Backend Application README
 
-This is the README file for the backend application of your project. This application is built using Flask, a Python web framework. It provides functionality for user authentication, event management, and file handling.
+This application is built using Flask, a Python web framework. It provides functionality for user authentication, event management, and file handling.
 
 ## Table of Contents
 - [Getting Started](#getting-started)
