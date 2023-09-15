@@ -70,26 +70,3 @@ To run the application, execute the following command:
 python run.py
 
 By default, the application will run on http://localhost:5000.
-
-### API Endpoints
-Here are the available API endpoints:
-
-### Users
-- POST /users/register: Register a new user.
-- POST /users/login: Log in with a registered user.
-- POST /users/logout: Log out a logged-in user.
-- GET /users/<username>: Retrieve user information.
-- GET /users: Retrieve information for all users.
-- PUT /users/<user_id>: Update user information.
-- DELETE /users/<user_id>: Delete a user.
-
-### Events
-- POST /events/create_event: Create a new event.
-- GET /events/<event_id>: Retrieve information for a specific event.
-- GET /events: Retrieve information for all events.
-- GET /events/all: Retrieve information for all events (alternative endpoint).
-- PUT /events/<event_id>: Update event information.
-- DELETE /events/<event_id>: Delete an event.
-
-### User Events
-- GET /users/<user_id>/events: Retrieve all events for a specific user.
