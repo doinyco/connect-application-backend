@@ -69,4 +69,14 @@ To run the application, execute the following command:
    ```shell
    python run.py
 
-- By default, the application will run on http://localhost:5000.
+### API Endpoints
+Here are the available API endpoints:
+
+### Users
+- POST /users/register: Register a new user.
+- POST /users/login: Log in with a registered user.
+- POST /users/logout: Log out a logged-in user.
+- GET /users/<username>: Retrieve user information.
+- GET /users: Retrieve information for all users.
+- PUT /users/<user_id>: Update user information.
+- DELETE /users/<user_id>: Delete a user.
