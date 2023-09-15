@@ -104,4 +104,4 @@ You can access a deployed version of this application on [Fly.io](https://fly.io
 - [Access the Root Endpoint](https://icy-surf-5897.fly.dev/):
   - Due to the application's login authentication system, accessing this URL without proper authorization will result in an "Unauthorized" message. To interact with the application, please follow the authentication and usage guidelines mentioned in the [Usage](#usage) section of this README.
 
-The deployed version may have additional features or optimizations. Feel free to explore and use the deployed application for testing or production use.
+  > Note: I am currently working on the frontend application of this project. Once the register and login forms are added to the frontend application, the authentication system will work seamlessly. You can find the frontend repository for this project on [GitHub](https://github.com/doinyco/connect-application-frontend).
