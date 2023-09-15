@@ -69,4 +69,4 @@ To run the application, execute the following command:
    ```shell
    python run.py
 
-By default, the application will run on http://localhost:5000.
+- By default, the application will run on http://localhost:5000.
