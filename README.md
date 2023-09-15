@@ -64,7 +64,7 @@ Before running the application, make sure to set up your environment variables. 
 
 By default, the application will run on http://localhost:5000.
 
-### API Endpoints
+## API Endpoints
 Here are the available API endpoints:
 
 ### Users
