@@ -102,6 +102,6 @@ You can access a deployed version of this application on [Fly.io](https://fly.io
   - When accessing this URL, you should see an empty list of events. This endpoint provides access to event data.
 
 - [Access the Users Endpoint](https://icy-surf-5897.fly.dev/users):
-  - Due to the application's login authentication system, accessing this URL without proper authorization will result in an "Unauthorized" message. To interact with the application, please follow the authentication and usage guidelines mentioned in the [Usage](#usage) section of this README.
+  - Due to the application's login authentication system, accessing this URL without proper authorization will result in an "Unauthorized" message. 
 
   > Note: I am currently working on the frontend application of this project. Once the register and login forms are added to the frontend application, the authentication system will work seamlessly. You can find the frontend repository for this project on [GitHub](https://github.com/doinyco/connect-application-frontend).
