@@ -47,10 +47,10 @@ Before you begin, ensure you have the following installed on your machine:
 
 3. Activate the virtual environment:
 
-On Windows:
+- On Windows:
    ```shell
    venv\Scripts\activate
 
-On macOS and Linux:
+- On macOS and Linux:
    ```shell
    source venv/bin/activate
