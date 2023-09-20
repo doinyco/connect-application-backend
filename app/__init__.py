@@ -20,7 +20,7 @@ def create_app(test_config=None):
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-    app.config['WTF_CSRF_ENABLED'] = True
+    app.config['WTF_CSRF_ENABLED'] = False
     
     if test_config is None:
         app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
@@ -34,6 +34,12 @@ def create_app(test_config=None):
     login_manager.init_app(app)
 
     from app.models.user import User
+    from app.models.login import LoginForm
+    from app.models.event import Event
+    from app.models.register import RegisterForm
+
+    # with app.app_context():
+    #     db.create_all()
 
     @login_manager.user_loader
     def load_user(user_id):
