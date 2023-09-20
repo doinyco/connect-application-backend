@@ -24,7 +24,7 @@ def validate_user_id(user_id):
     try:
         user_id = int(user_id)
     except:
-        return abort(make_response(jsonify({"message": f"Invalid user with ID {user_id} "}), 400))
+        return abort(make_response(jsonify({"message": f"Invalid user with ID {user_id}."}), 400))
 
     user = User.query.get(user_id)
 
@@ -50,7 +50,7 @@ def register():
         # Check if the username already exists
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
-            response_data["error"] = "Username already exists"
+            response_data["error"] = "Username already exists, please choose another one."
             return jsonify(response_data), 400
 
         # Create a new user
@@ -59,7 +59,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        response_data["message"] = "Registration successful"
+        response_data["message"] = "User successfully registered!"
         return jsonify(response_data), 201
 
     response_data["errors"] = form.errors
@@ -77,7 +77,7 @@ def login():
             logging.debug(f"Database Hashed Password: {user.password}")
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
-                return make_response(jsonify(message="Logged in successfully"), 200)
+                return make_response(jsonify(message="User successfully logged in!"), 200)
     return make_response(jsonify(message="Invalid username or password"), 401)
 
 # LOGOUT USER
@@ -85,7 +85,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return jsonify(message="Logged out successfully"), 200
+    return jsonify(message="User successfully logged out!"), 200
 
 # READ (GET) ONE USER 
 @users_bp.route("/<username>", methods=["GET"])
@@ -95,7 +95,7 @@ def read_user(username):
 
     if user is None:
         return {
-            "message": f"User {username} not found"
+            "message": f"User {username} not found."
         }, 404
 
     response = {

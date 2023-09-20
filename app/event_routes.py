@@ -41,7 +41,7 @@ def create_event():
             file = request.files["file"]
 
             if file.filename == "":
-                return jsonify(message="Please upload a photo"), 400
+                return jsonify(message="Please upload a photo."), 400
 
             if file and allowed_file(file.filename):
                 file_data = file.read()
@@ -59,18 +59,18 @@ def create_event():
                 db.session.add(new_event)
                 db.session.commit()
 
-                return jsonify(message="Event created successfully"), 201
+                return jsonify(message="Event created successfully."), 201
 
-            return jsonify(message="Invalid file format"), 400
+            return jsonify(message="Invalid file format."), 400
 
         return jsonify(message="File is missing"), 400
 
     except SQLAlchemyError as e:
         db.session.rollback()
-        return jsonify(message="An error occurred while saving the event"), 500
+        return jsonify(message="An error occurred while saving the event."), 500
 
     except Exception as e:
-        return jsonify(message="An error occurred"), 500
+        return jsonify(message="An error occurred."), 500
 
 # READ (GET) ONE EVENT 
 @events_bp.route("/<event_id>", methods=["GET"])
@@ -109,6 +109,27 @@ def get_events():
         event_list.append(event_data)
 
     return jsonify(event_list)
+
+# READ (GET) ALL EVENTS
+@events_bp.route("/all", methods=["GET"])
+def get_all_events():
+    events = Event.query.all()
+    event_list = []
+
+    for event in events:
+        event_data = {
+            "event_id": event.event_id,
+            "title": event.title,
+            "event_type": event.event_type,
+            "location": event.location,
+            "date": event.date,
+            "description": event.description,
+            "user_id": event.user_id,
+            "file_data": base64.b64encode(event.file_data).decode('utf-8') if event.file_data else None
+        }
+        event_list.append(event_data)
+
+    return jsonify(event_list)
         
 # PUT (UPDATE) EVENT
 @events_bp.route("/<event_id>", methods=["PUT"])
@@ -126,7 +147,7 @@ def update_event(event_id):
         file = request.files["file"]
 
         if file.filename == "":
-            return jsonify(message="No selected file"), 400
+            return jsonify(message="No selected file."), 400
         
         if file and allowed_file(file.filename):
             file_data = file.read()
@@ -134,7 +155,7 @@ def update_event(event_id):
 
     db.session.commit()
 
-    return make_response(f"Event with ID {event.event_id} successfully updated")
+    return make_response(f"Event with ID {event.event_id} successfully updated.")
 
 # DELETE EVENT
 @events_bp.route("/<event_id>", methods=["DELETE"])
