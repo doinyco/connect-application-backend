@@ -98,7 +98,7 @@ The application uses SQLAlchemy to interact with the database. Here are the rele
 You can access a deployed version of this application on [Fly.io](https://fly.io). Fly.io is a platform for deploying and scaling applications. For more information on deploying Python applications with Fly.io, refer to the [Fly.io Python Documentation](https://fly.io/docs/languages-and-frameworks/python/).
 
 - [Access the Events Endpoint](https://icy-surf-5897.fly.dev/events):
-  - When accessing this URL, you should see an empty list of events. This endpoint provides access to event data.
+  - This endpoint provides access to event data.
 
 - [Access the Users Endpoint](https://icy-surf-5897.fly.dev/users):
   - Due to the application's login authentication system, accessing this URL without proper authorization will result in an "Unauthorized" message. 
