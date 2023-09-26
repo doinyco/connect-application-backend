@@ -53,7 +53,7 @@ Before you begin, ensure you have the following installed on your machine:
 
 4. Install the required packages:
    ```shell
-     pip install -r requirements.txt
+   pip install -r requirements.txt
 
 ### Configuration
 Before running the application, make sure to set up your environment variables. You can do this by creating a .env file in the project directory and adding the following variables:
