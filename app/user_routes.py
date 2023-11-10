@@ -4,17 +4,25 @@ from app.models.login import LoginForm
 from app.models.register import RegisterForm
 from app.models.user import User
 import base64
-from flask_login import LoginManager, login_user, login_required, logout_user, LoginManager
+from flask_login import LoginManager, login_user, login_required, LoginManager
 from app.models.login import LoginForm
 from app.models.register import RegisterForm
 from flask_bcrypt import Bcrypt
-import logging
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
 login_manager = LoginManager()
 bcrypt = Bcrypt()
 login_manager.login_view = "login"
 
 users_bp = Blueprint("user_bp", __name__, url_prefix="/users")
+
+@users_bp.route('/protected-resource', methods=['GET'])
+@jwt_required
+def protected_resource():
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+
+    return jsonify(message=f"Hello, {user.username}! This is a protected resource.")
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -72,37 +80,37 @@ def login():
 
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if user:
-            logging.debug(f"Form Password: {form.password.data}")
-            logging.debug(f"Database Hashed Password: {user.password}")
-            if bcrypt.check_password_hash(user.password, form.password.data):
-                login_user(user)
-                return make_response(jsonify(message="User successfully logged in!"), 200)
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            access_token = create_access_token(identity=user.username)
+            login_user(user)
+            return make_response(jsonify(access_token=access_token, message="User successfully logged in!", user_id=user.user_id, username=user.username), 200)
     return make_response(jsonify(message="Invalid username or password"), 401)
 
 # LOGOUT USER
 @users_bp.route("/logout", methods=["POST"])
 @login_required
 def logout():
-    logout_user()
+    #logout_user()
     return jsonify(message="User successfully logged out!"), 200
 
 # READ (GET) ONE USER 
 @users_bp.route("/<username>", methods=["GET"])
-@login_required
+# @login_required
+@jwt_required()
 def read_user(username):
-    user = get_user_by_username(username)
+    current_user = get_jwt_identity()
+
+    user = get_user_by_username(current_user)
 
     if user is None:
         return {
-            "message": f"User {username} not found."
+            "message": f"User {current_user} not found."
         }, 404
 
     response = {
         "user_id": user.user_id,
         "username": user.username,
-        "email": user.email,
-        "password": user.password
+        "email": user.email
     }
     return jsonify({"user": response}), 200
 

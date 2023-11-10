@@ -35,3 +35,4 @@ typing-extensions==4.7.1
 werkzeug==2.3.7
 WTForms==3.0.1
 zipp==3.16.2
+flask-jwt-extended==4.5.3

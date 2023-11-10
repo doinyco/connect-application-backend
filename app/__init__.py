@@ -7,6 +7,8 @@ from flask_cors import CORS
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from flask_wtf.csrf import CSRFProtect
+from flask_jwt_extended import JWTManager
+import secrets
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -17,6 +19,10 @@ csrf = CSRFProtect()
 
 def create_app(test_config=None):
     app = Flask(__name__)
+
+    secret_key = secrets.token_hex(32)
+    jwt = JWTManager(app)
+    app.config['JWT_SECRET_KEY'] = secret_key
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
@@ -38,8 +44,8 @@ def create_app(test_config=None):
     from app.models.event import Event
     from app.models.register import RegisterForm
 
-    # with app.app_context():
-    #     db.create_all()
+    with app.app_context():
+        db.create_all()
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -51,6 +57,6 @@ def create_app(test_config=None):
     app.register_blueprint(users_bp)
     app.register_blueprint(events_bp)
 
-    CORS(app)
+    CORS(app, supports_credentials=True)
     CSRFProtect(app)
     return app
