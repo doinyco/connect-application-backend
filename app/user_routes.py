@@ -82,8 +82,9 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             access_token = create_access_token(identity=user.username)
-            login_user(user)
+            login_result = login_user(user)
             return make_response(jsonify(access_token=access_token, message="User successfully logged in!", user_id=user.user_id, username=user.username), 200)
+    
     return make_response(jsonify(message="Invalid username or password"), 401)
 
 # LOGOUT USER
@@ -95,7 +96,6 @@ def logout():
 
 # READ (GET) ONE USER 
 @users_bp.route("/<username>", methods=["GET"])
-# @login_required
 @jwt_required()
 def read_user(username):
     current_user = get_jwt_identity()
@@ -116,7 +116,7 @@ def read_user(username):
 
 # READ (GET) ALL USERS
 @users_bp.route("", methods=["GET"])
-@login_required
+@jwt_required()
 def get_all_users():
     users = User.query.all()
     users_response = []
@@ -132,7 +132,7 @@ def get_all_users():
 
 # READ ALL EVENTS FROM ONE USER
 @users_bp.route("/<user_id>/events", methods=["GET"])
-@login_required
+@jwt_required()
 def read_events_from_user(user_id):
     user = validate_user_id(user_id)
     events_response = []
@@ -148,7 +148,7 @@ def read_events_from_user(user_id):
             "file_data": base64.b64encode(event.file_data).decode('utf-8') if event.file_data else None
         }
         events_response.append(event_data)
-
+    
     return jsonify({
         "user_id": user.user_id,
         "username": user.username,
@@ -157,7 +157,7 @@ def read_events_from_user(user_id):
 
 # UPDATE USER 
 @users_bp.route("/<user_id>", methods=["PUT"])
-@login_required
+@jwt_required()
 def update_user(user_id):
     user = validate_user_id(user_id)
     request_body = request.get_json()
@@ -176,7 +176,7 @@ def update_user(user_id):
 
 # DELETE USER
 @users_bp.route("/<user_id>", methods=["DELETE"])
-@login_required
+@jwt_required()
 def delete_user(user_id):
     user = validate_user_id(user_id)
     db.session.delete(user)

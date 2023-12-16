@@ -36,7 +36,7 @@ def create_event():
         date = request.form.get("date")
         description = request.form.get("description")
         user_id = int(request.form.get("user_id"))
-
+    
         if "file" in request.files:
             file = request.files["file"]
 
