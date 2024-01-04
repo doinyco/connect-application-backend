@@ -137,11 +137,22 @@ def update_event(event_id):
     event = get_event_or_abort(event_id)
     request_body = request.form
 
-    event.title = request_body["title"]
-    event.event_type = request_body["event_type"]
-    event.location = request_body["location"]
-    event.date = request_body["date"]
-    event.description = request_body["description"]
+    # event.title = request_body["title"]
+    # event.event_type = request_body["event_type"]
+    # event.location = request_body["location"]
+    # event.date = request_body["date"]
+    # event.description = request_body["description"]
+
+    if "title" in request_body:
+        event.title = request_body["title"]
+    if "event_type" in request_body:
+        event.event_type = request_body["event_type"]
+    if "location" in request_body:
+        event.location = request_body["location"]
+    if "date" in request_body:
+        event.date = request_body["date"]
+    if "description" in request_body:
+        event.description = request_body["description"]
 
     if "file" in request.files:
         file = request.files["file"]
