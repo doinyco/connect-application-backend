@@ -136,13 +136,7 @@ def get_all_events():
 def update_event(event_id):
     event = get_event_or_abort(event_id)
     request_body = request.form
-
-    # event.title = request_body["title"]
-    # event.event_type = request_body["event_type"]
-    # event.location = request_body["location"]
-    # event.date = request_body["date"]
-    # event.description = request_body["description"]
-
+    
     if "title" in request_body:
         event.title = request_body["title"]
     if "event_type" in request_body:
@@ -166,7 +160,7 @@ def update_event(event_id):
 
     db.session.commit()
 
-    return make_response(f"Event with ID {event.event_id} successfully updated.")
+    return jsonify(message=f"Event with ID {event.event_id} successfully updated.")
 
 # DELETE EVENT
 @events_bp.route("/<event_id>", methods=["DELETE"])

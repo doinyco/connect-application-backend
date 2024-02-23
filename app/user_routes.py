@@ -9,6 +9,7 @@ from app.models.login import LoginForm
 from app.models.register import RegisterForm
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+import logging
 
 login_manager = LoginManager()
 bcrypt = Bcrypt()
@@ -55,13 +56,11 @@ def register():
         email = form.email.data
         password = form.password.data
 
-        # Check if the username already exists
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
             response_data["error"] = "Username already exists, please choose another one."
             return jsonify(response_data), 400
 
-        # Create a new user
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         new_user = User(username=username, email=email, password=hashed_password)
         db.session.add(new_user)
@@ -80,18 +79,22 @@ def login():
 
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            access_token = create_access_token(identity=user.username)
-            login_result = login_user(user)
-            return make_response(jsonify(access_token=access_token, message="User successfully logged in!", user_id=user.user_id, username=user.username), 200)
-    
-    return make_response(jsonify(message="Invalid username or password"), 401)
+        if user:
+            if bcrypt.check_password_hash(user.password, form.password.data):
+                access_token = create_access_token(identity=user.username)
+                login_result = login_user(user)
+                return make_response(jsonify(access_token=access_token, message="User successfully logged in!", user_id=user.user_id, username=user.username), 200)
+            else:
+                return make_response(jsonify(message="Invalid username or password*_*"), 401)
+        else:
+            return make_response(jsonify(message="User not found"), 404)
+
 
 # LOGOUT USER
 @users_bp.route("/logout", methods=["POST"])
-@login_required
+@jwt_required()
 def logout():
-    #logout_user()
+    logout_user()
     return jsonify(message="User successfully logged out!"), 200
 
 # READ (GET) ONE USER 
@@ -162,17 +165,36 @@ def update_user(user_id):
     user = validate_user_id(user_id)
     request_body = request.get_json()
 
-    user.username = request_body["username"]
-    user.email = request_body["email"]
+    if "username" in request_body:
+        new_username = request_body["username"]
+
+        if new_username == user.username:
+            return jsonify({"error": "New username is the same as the current one."}), 400
+
+        existing_user = User.query.filter(User.username == new_username, User.user_id != user_id).first()
+        if existing_user:
+            return jsonify({"error": "Username already exists, please choose another one."}), 400
+        user.username = new_username
+
+    if "email" in request_body:
+        new_email = request_body["email"]
+
+        if new_email == user.email:
+            return jsonify({"error": "New email is the same as the current one."}), 400
+
+        existing_email = User.query.filter(User.email == new_email, User.user_id != user_id).first()
+        if existing_email:
+            return jsonify({"error": "Email already exists, please choose another one."}), 400
+        user.email = request_body["email"]
     
-    new_password = request_body["password"]
-    if new_password:
-        hashed_password = bcrypt.generate_password_hash(new_password).decode('utf-8')
-        user.password = hashed_password
+    if "password" in request_body:
+        new_password = request_body["password"]
+        if new_password:
+            hashed_password = bcrypt.generate_password_hash(new_password).decode('utf-8')
+            user.password = hashed_password
 
     db.session.commit()
-
-    return make_response(f"User with ID {user.user_id} successfully updated.")
+    return jsonify({"success": "User data successfully updated"}), 200
 
 # DELETE USER
 @users_bp.route("/<user_id>", methods=["DELETE"])
